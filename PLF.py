@@ -11,7 +11,6 @@ import warnings
 warnings.filterwarnings("ignore")
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-import PLF_Visualisation as Vis
 
 Experimental_coverages_all = {}
 Reference_Proteome=None
@@ -214,16 +213,6 @@ def run_full_analysis( Domain_types, Protein_peptides, experiment_feed, cpus=1,p
     ##################
     Coverage_Json,Structural_Json,Full_Results_TSV = PLF(Protein_peptides,experiment_feed,Spiecies=Spiecies,paired=paired,Domain_Types=Domain_types,cpus=cpus,p_threshold=p_threshold,protein_list=protein_list).PLF_Analysis()
     Full_Results_TSV.to_csv(f'{outname}.tsv',sep='\t',index=False)
-
-    Results = pd.read_csv(f'{outname}.tsv', sep='\t')
-    diff = next((s for s in Results.columns if s.startswith('Diff')), None)
-    p_val = next((s for s in Results.columns if s.startswith('p:')), None)
-    exp_feed_iter = iter(experiment_feed)
-    g1_lab = next(exp_feed_iter)
-    g2_lab = next(exp_feed_iter)
-    samples = [experiment_feed[g1_lab], experiment_feed[g2_lab]]
-    directory = 'Visualisations'
-    Vis.visualiseAll([Results], diff, p_val, g1_lab, g2_lab, samples, save=True, directory=f'{directory}')
 
     mplf_export_data={}
     mplf_export_data['Structural_Results']=Structural_Json
